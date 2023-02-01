@@ -1,28 +1,24 @@
 const File_Converter = () => {
   const file = DriveApp.getFileById("1twzdShtyJIDj0Sutp04QrjnIMwRxqkVu").getDownloadUrl();
-  Logger.log(file)
-  const url = "https://api.cloudconvert.com/v2/jobs";
+  const Fetch_URL = "https://sync.api.cloudconvert.com/v2/jobs";
   const payload = {
     "tasks": {
-      "import-1": {
+      "Drive_file": {
         "operation": "import/url",
         "url": file,
-        "filename": "url.pdf"
+        "filename": "drive.pdf"
       },
-      "url_convert": {
+      "converting": {
         "operation": "convert",
-        "input_format": "pdf",
         "output_format": "jpg",
-        "engine": "poppler",
         "input": [
-          "import-1"
-        ],
-        "pixel_density": 300
+          "Drive_file"
+        ]
       },
-      "export-1": {
+      "download_url": {
         "operation": "export/url",
         "input": [
-          "url_convert"
+          "converting"
         ],
         "inline": false,
         "archive_multiple_files": false
@@ -32,12 +28,17 @@ const File_Converter = () => {
   }
 
   const option = {
-    "method": "post",
+    "method": "POST",
+    "payload": JSON.stringify(payload),
     "headers": {
-      "Authorization": "Bearer "+ScriptProperties.deleteProperty("API_Key"),
-      "Content-type": "application/json"
+      "Content-type": "application/json",
+      "Authorization": "Bearer " + ScriptProperties.getProperty("API-Key")
     },
-    "data": payload
+    "muteHttpExceptions": true
   }
-  Logger.log(UrlFetchApp.fetch(url, option))
+
+  const return_Payload = JSON.parse(UrlFetchApp.fetch(Fetch_URL,option));
+  const jpg_URL = return_Payload.data.tasks[0].result.files[0].url;
+  Logger.log(return_Payload)
+  Logger.log(jpg_URL)
 }
