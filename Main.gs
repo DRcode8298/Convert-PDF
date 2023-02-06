@@ -1,13 +1,9 @@
 /**
- * this script is worked by cloudconvert.
- * if you use JavaScript,it would be not worked.
- * 
- * 
- * if your file isn't sharing on google drive then must share the file on there.
+ * If the file is not shared with Google Drive, you will need to share the file with Google Drive.
  * googleドライブにてファイルが共有されていない場合は共有してください。
  */
 const File_Converter = () => {
-  const file = getFileByUrl(ScriptProperties.getProperty("File_URL")).getDownloadUrl();
+  const file = getFileByUrl(ScriptProperties.getProperty("File_URL")).getDownloadUrl();//JavaScriptを使用する場合はここを通常のURLに変更してください。
   const Fetch_URL = "https://sync.api.cloudconvert.com/v2/jobs";
   const payload = {
     "tasks": {
