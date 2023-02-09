@@ -2,8 +2,8 @@
  * If the file is not shared with Google Drive, you will need to share the file with Google Drive.
  * googleドライブにてファイルが共有されていない場合は共有してください。
  */
-const File_Converter = () => {
-  const file = getFileByUrl(ScriptProperties.getProperty("File_URL")).getDownloadUrl();//JavaScriptを使用する場合はここを通常のURLに変更してください。
+const File_Converter = (URL,Authorization_Key) => {
+  const file = getFileByUrl(URL).getDownloadUrl();//JavaScriptを使用する場合はここを通常のURLに変更してください。
   const Fetch_URL = "https://sync.api.cloudconvert.com/v2/jobs";
   const payload = {
     "tasks": {
@@ -36,7 +36,7 @@ const File_Converter = () => {
     "payload": JSON.stringify(payload),
     "headers": {
       "Content-type": "application/json",
-      "Authorization": "Bearer " + ScriptProperties.getProperty("API-Key")
+      "Authorization": "Bearer " + Authorization_Key
     },
     "muteHttpExceptions": true
   }
@@ -45,6 +45,7 @@ const File_Converter = () => {
     const jpg_URL = return_Payload.data.tasks[0].result.files[0].url;
     Logger.log(return_Payload)
     Logger.log(jpg_URL)
+    return jpg_URL;
   } catch (e) {
     Logger.log(e);
   }
